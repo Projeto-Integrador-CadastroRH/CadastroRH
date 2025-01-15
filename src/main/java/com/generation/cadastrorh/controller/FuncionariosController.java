@@ -1,5 +1,6 @@
 package com.generation.cadastrorh.controller;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -48,5 +49,33 @@ public class FuncionariosController {
 	
 	}    
 
+	
+	@PostMapping // cadastrar
+	public ResponseEntity<Funcionarios> post(@Valid @RequestBody Funcionarios funcionarios){
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(funcionariosRepository.save(funcionarios));
+	}
+	
+	@PutMapping // atualizar
+	public ResponseEntity<Funcionarios> put(@Valid @RequestBody Funcionarios funcionarios){
+		return funcionariosRepository.findById(funcionarios.getId())
+				.map //if
+				(resposta -> ResponseEntity.status(HttpStatus.OK)
+						.body(funcionariosRepository.save(funcionarios)))
+				
+				.orElse
+					(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+											
+	}
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@DeleteMapping ("/{id}")
+	public void delete(@PathVariable Long id) {
+		Optional <Funcionarios> funcionarios = funcionariosRepository.findById(id);
+		
+		if(funcionarios.isEmpty())
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		
+		funcionariosRepository.deleteById(id); 
+	}
 
 }

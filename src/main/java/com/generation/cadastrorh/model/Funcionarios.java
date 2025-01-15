@@ -29,7 +29,7 @@ public class Funcionarios {
 	@NotNull(message = "A data de admissão é obrigatória.")
 	private LocalDate dateAdmissao;
 	
-	@NotBlank(message = "O atributo Salário é obrigatório")
+	@NotNull(message = "O atributo Salário é obrigatório")
 	@Column(precision = 10, scale = 2)
 	private BigDecimal salario;
 
